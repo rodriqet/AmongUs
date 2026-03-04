@@ -1,5 +1,7 @@
 package com.amongus.DAO;
 
+import com.amongus.modelo.tripulante.Tripulante;
+
 import java.util.ArrayList;
 
 public interface TripulanteDAO {

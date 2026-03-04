@@ -1,8 +1,11 @@
 package com.amongus.modelo.tripulante;
 
-public class Ingeniero extends Tripulante {
-    public Ingeniero(String nombre) {
+import com.amongus.modelo.Sala;
 
+public class Ingeniero extends Tripulante {
+
+    public Ingeniero(String nombre) {
+        super(nombre, "ingeniero");
     }
 
     public void habilidadEspecial() {
@@ -12,7 +15,7 @@ public class Ingeniero extends Tripulante {
     public void repararSalas(Sala sala) {
         if (sala.isSaboteada()) {
             System.out.println("Se esta reparando...");
-            sala.setSaboteada(True);
+            sala.setSaboteada(true);
             System.out.println("La sala ya esta reparada");
         } else {
             System.out.println("No hay nada para reparar");
