@@ -1,8 +1,10 @@
-package com.amongus;
+package com.amongus.DAOImpl;
+
+import com.amongus.DAO.TripulanteDAO;
 
 import java.util.ArrayList;
 
-public class TripulanteDAOImpl extends TripulanteDAO{
+public class TripulanteDAOImpl extends TripulanteDAO {
     @Override
     public void insertar() {
         
