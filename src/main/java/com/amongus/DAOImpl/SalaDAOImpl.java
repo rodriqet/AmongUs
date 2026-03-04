@@ -1,4 +1,4 @@
-package com.amongus;
+package com.amongus.DAOImpl;
 
 public class SalaDAOImpl {
 

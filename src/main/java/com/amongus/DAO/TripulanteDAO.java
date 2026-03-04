@@ -1,4 +1,4 @@
-package com.amongus;
+package com.amongus.DAO;
 
 import java.util.ArrayList;
 
