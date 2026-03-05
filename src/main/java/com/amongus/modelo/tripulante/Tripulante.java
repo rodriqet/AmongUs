@@ -58,11 +58,11 @@ public abstract class Tripulante implements Trabajable, Votable {
         }
     }
 
-    public int votar(Tripulante sospechoso) {
+    public int votar(int numero) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("!Turno de voto de " + sospechoso.getNombre() + "!");
-        System.out.print("A quien votas? (1-" + Nave.getTripulantesVivos() + ", 0 para skip): ");
+        System.out.println("!Turno de voto de " + this.getNombre() + "!");
+        System.out.print("A quien votas? (1-" + numero + ", 0 para skip): ");
         return sc.nextInt();
     }
 
