@@ -74,9 +74,8 @@ public class Nave {
     public void iniciarVotacion(){
         HashMap<String, Integer> votacion = new HashMap<>();
         for (Tripulante tripulante : getTripulantesVivos()) {
-            tripulante.votar(tripulante);
+            tripulante.votar(getTripulantesVivos().size());
         }
-
 
 
 
