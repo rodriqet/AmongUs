@@ -4,6 +4,7 @@ import com.amongus.modelo.tripulante.Impostor;
 import com.amongus.modelo.tripulante.Tripulante;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Nave {
 
@@ -34,9 +35,26 @@ public class Nave {
         tareas.add(tarea);
     }
 
+    public ArrayList<Tripulante> getTripulantesVivos() {
+        ArrayList<Tripulante> tripulantesVivos = new ArrayList<>();
+        for (Tripulante tripulante : tripulantes) {
+            if (tripulante.isVivo()){
+                if (!(tripulante instanceof Impostor)){
+                    tripulantesVivos.add(tripulante);
+                }
+            }
+        }
+        return tripulantesVivos;
+    }
+
+    public int getImpostoresVivos() {
+        return tripulantes.size() - getTripulantesVivos().size();
+    }
+
     public void limpiarPantalla(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        for (int i = 0; i < 50; i++) {
+            System.out.println();
+        }
     }
 
     public void mostrarEstadoNave(){
@@ -54,37 +72,50 @@ public class Nave {
     //• iniciarVotacion(): Gestiona la votación con limpieza
     // de pantalla entre votos.
     public void iniciarVotacion(){
+        HashMap<String, Integer> votacion = new HashMap<>();
+        for (Tripulante tripulante : getTripulantesVivos()) {
+            tripulante.votar(tripulante);
+        }
+
+
+
+
+
 
     }
 
     public boolean verificarVictoriaTripulantes(){
-        boolean victoriaPorExpulsion = false;
-
-        for (Tripulante impostor : tripulantes) {
-            if (impostor instanceof Impostor){
-                victoria = false;
-                break;
+        boolean victoriaPorExpulsion = true;
+        if (tareas.isEmpty()){
+            return true;
+        }
+        for (Tripulante tripulante : tripulantes) {
+            if (tripulante instanceof Impostor && tripulante.isVivo()){
+                victoriaPorExpulsion = false;
             }
         }
-
-
-        if (tareas.isEmpty()){
-            victoria = true;
-        }
+        return victoriaPorExpulsion;
     }
 
+    public boolean verificarVictoriaImpostor() {
+        return getImpostoresVivos() >= getTripulantesVivos().size();
+    }
 
-
-//• verificarVictoriaTripulantes(): boolean — true si tareas completas o impostor
-//expulsado.
-//• verificarVictoriaImpostor(): boolean — true si impostores vivos ≥ normales vivos.
-//• turno(): Turno completo: limpiar, mostrar info, menú, acción, victoria.
-
-
-
+    //• turno(): Turno completo: limpiar, mostrar info, menú, acción, victoria.
+    public void turno() {
 
 
 
+
+
+
+
+
+
+
+
+
+    }
 
 
 
