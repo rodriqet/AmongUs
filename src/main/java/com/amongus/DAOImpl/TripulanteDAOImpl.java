@@ -1,13 +1,14 @@
 package com.amongus.DAOImpl;
 
 import com.amongus.DAO.TripulanteDAO;
+import com.amongus.modelo.tripulante.Tripulante;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class TripulanteDAOImpl extends TripulanteDAO {
+public class TripulanteDAOImpl implements TripulanteDAO {
 
     private Connection conexion;
 
@@ -16,7 +17,7 @@ public class TripulanteDAOImpl extends TripulanteDAO {
     }
 
     @Override
-    public void insertar() {
+    public void insertar(Tripulante tripulante) {
         String sql = "INSERT INTO tripulante (nombre, rol, vivo) VALUES (?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             //ps.setString(1, tripulante.getnombre());
@@ -36,7 +37,7 @@ public class TripulanteDAOImpl extends TripulanteDAO {
     }
 
     @Override
-    public void actualizar() {
+    public void actualizar(Tripulante tripulante) {
 
     }
 
