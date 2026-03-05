@@ -3,9 +3,11 @@ package com.amongus.modelo.tripulante;
 import com.amongus.DAO.TripulanteDAO;
 import com.amongus.interfaces.Trabajable;
 import com.amongus.interfaces.Votable;
+import com.amongus.modelo.Nave;
 import com.amongus.modelo.Tarea;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public abstract class Tripulante implements Trabajable, Votable {
 
@@ -55,8 +57,12 @@ public abstract class Tripulante implements Trabajable, Votable {
         }
     }
 
-    public void votar(Tripulante sospechoso) {
+    public int votar(Tripulante sospechoso) {
+        Scanner sc = new Scanner(System.in);
 
+        System.out.println("!Turno de voto de " + sospechoso.getNombre() + "!");
+        System.out.print("A quien votas? (1-" + Nave.getTripulantesVivos() + ", 0 para skip): ");
+        return sc.nextInt();
     }
 
     void habilidadEspecial() {
