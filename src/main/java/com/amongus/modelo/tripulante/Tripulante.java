@@ -52,16 +52,15 @@ public abstract class Tripulante implements Trabajable, Votable {
     @Override
     public void realizarTarea(Tarea tarea) {
         if (vivo) {
+            tarea.setCompletada(true);
         }
     }
 
     public void votar(Tripulante sospechoso) {
-
+        System.out.println();
     }
 
-    void habilidadEspecial() {
-
-    }
+    void habilidadEspecial() {}
 
     @Override
     public String toString() {
