@@ -54,6 +54,7 @@ public abstract class Tripulante implements Trabajable, Votable {
     @Override
     public void realizarTarea(Tarea tarea) {
         if (vivo) {
+            tarea.setCompletada(true);
         }
     }
 
@@ -65,9 +66,7 @@ public abstract class Tripulante implements Trabajable, Votable {
         return sc.nextInt();
     }
 
-    void habilidadEspecial() {
-
-    }
+    void habilidadEspecial() {}
 
     @Override
     public String toString() {

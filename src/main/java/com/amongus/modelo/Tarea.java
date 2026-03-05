@@ -1,5 +1,7 @@
 package com.amongus.modelo;
 
+import com.amongus.modelo.tripulante.Tripulante;
+
 public class Tarea {
 
     private int id;
