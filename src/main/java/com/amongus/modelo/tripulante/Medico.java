@@ -6,6 +6,7 @@ public class Medico extends Tripulante {
         super(nombre, "medico");
     }
 
+    @Override
     public void habilidadEspecial() {
         System.out.println("Puedes examinar tripulantes");
     }

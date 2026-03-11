@@ -10,6 +10,7 @@ public class Impostor extends Tripulante implements Saboteable {
         super(nombre, "impostor");
     }
 
+    @Override
     public void habilidadEspecial() {
         System.out.println("Puedes sabotear y eliminar");
     }
