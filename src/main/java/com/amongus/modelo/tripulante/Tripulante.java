@@ -66,7 +66,7 @@ public abstract class Tripulante implements Trabajable, Votable {
         return sc.nextInt();
     }
 
-    void habilidadEspecial() {}
+    public void habilidadEspecial() {}
 
     @Override
     public String toString() {
