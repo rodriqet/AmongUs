@@ -8,6 +8,7 @@ public class Capitan extends Tripulante {
         super(nombre, "capitan");
     }
 
+    @Override
     public void habilidadEspecial() {
         System.out.println("Puedes convocar votaciones");
     }

@@ -8,6 +8,7 @@ public class Ingeniero extends Tripulante {
         super(nombre, "ingeniero");
     }
 
+    @Override
     public void habilidadEspecial() {
         System.out.println("Puedes reparar salas");
     }
