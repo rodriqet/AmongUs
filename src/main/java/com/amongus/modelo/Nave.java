@@ -2,10 +2,7 @@ package com.amongus.modelo;
 
 import com.amongus.modelo.tripulante.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Nave {
 
@@ -70,14 +67,6 @@ public class Nave {
         }
     }
 
-    //=== RESULTADO DE LA VOTACION ===
-    // Farid: 0 votos
-    // Miriam: 1 voto
-    // Pablo: 3 votos EXPULSADO ⬅️
-    // Laura: 0 votos
-    //Pablo ha sido expulsado de la nave...
-    //¡Pablo ERA el Impostor! �
-    //TODO
     public void iniciarVotacion(){
         Scanner sc = new Scanner(System.in);
         HashMap<String, Integer> votacion = new HashMap<>();
@@ -95,6 +84,55 @@ public class Nave {
         }
 
         System.out.println(" === RESULTADO DE LA VOTACIÓN === ");
+
+        int maxVotos = Collections.max(votacion.values());
+
+        List<String> masVotados = new ArrayList<>();
+        for (Map.Entry<String, Integer> tripulantesVotacion : votacion.entrySet()) {
+            if (tripulantesVotacion.getValue() == maxVotos) {
+                masVotados.add(tripulantesVotacion.getKey());
+            }
+        }
+
+        boolean hayEmpate = masVotados.size() > 1;
+
+        System.out.println("=== RESULTADO DE LA VOTACION ===");
+
+        for (Map.Entry<String, Integer> entry : votacion.entrySet()) {
+            String nombre = entry.getKey();
+            int votos = entry.getValue();
+
+            if (masVotados.contains(nombre) && !hayEmpate) {
+                System.out.println(nombre + ": " + votos + " votos EXPULSADO ⬅️");
+            } else if (masVotados.contains(nombre) && hayEmpate) {
+                System.out.println(nombre + ": " + votos + " votos EMPATE ⚠️");
+            } else {
+                System.out.println(nombre + ": " + votos + " votos");
+            }
+        }
+
+        if (hayEmpate) {
+            System.out.print("\nEmpataron: ");
+            System.out.println(masVotados);
+            System.out.println("Nadie es expulsado");
+        } else {
+            String expulsado = masVotados.getFirst();
+            System.out.println("\n" + expulsado + " ha sido expulsado de la nave");
+
+            Tripulante encontrado = null;
+            for (Tripulante t : tripulantes) {
+                if (Objects.equals(expulsado, t.getNombre())){
+                    encontrado = t;
+                }
+            }
+            if (encontrado instanceof Impostor) {
+                System.out.println("¡" + expulsado + " era el impostor! 🎉");
+            } else {
+                System.out.println(expulsado + " era un tripulante inocente 😥😭");
+            }
+        }
+
+
     }
 
     public boolean verificarVictoriaTripulantes(){

@@ -138,7 +138,7 @@ public class Main {
 
             System.out.print("El impostor ");
             for (int i = 0; i < tripulantes.size(); i++) {
-                if (tripulantes.get(i).getRol() == "Impostro") {
+                if (Objects.equals(tripulantes.get(i).getRol(), "Impostor")) {
                     System.out.print(tripulantes.get(i).getNombre());
                 }
             }
