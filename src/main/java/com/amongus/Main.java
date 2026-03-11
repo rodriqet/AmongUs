@@ -8,14 +8,12 @@ import com.amongus.DAOImpl.TareaDAOImpl;
 import com.amongus.DAOImpl.TripulanteDAOImpl;
 import com.amongus.modelo.Nave;
 import com.amongus.modelo.Sala;
+import com.amongus.modelo.Tarea;
 import com.amongus.modelo.tripulante.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -76,13 +74,134 @@ public class Main {
 
         //TODO Persistencia inicial: Insertar tripulantes y salas en BBDD
 
+        Nave nave = new Nave(tripulantes, salas);
+
+        HashMap<String, Sala> tareaDesc = new HashMap<>();
+        // 0: Reactor, 1: Cafeteria, 2: Navegación, 3: Electricidad, 4: Armamento, 5: Comunicaciones
+
+        // --- REACTOR (Índice 0) ---
+        tareaDesc.put("Arrancar reactor", salas.get(0));
+        tareaDesc.put("Desbloquear colectores", salas.get(0));
+        tareaDesc.put("Desviar energía al reactor", salas.get(0));
+
+        // --- CAFETERÍA (Índice 1) ---
+        tareaDesc.put("Vaciar basurero", salas.get(1));
+        tareaDesc.put("Subir datos de cafetería", salas.get(1));
+        tareaDesc.put("Arreglar cableado de cafetería", salas.get(1));
+
+        // --- NAVEGACIÓN (Índice 2) ---
+        tareaDesc.put("Estabilizar dirección", salas.get(2));
+        tareaDesc.put("Alinear mapa", salas.get(2));
+        tareaDesc.put("Trazar rumbo espacial", salas.get(2));
+        tareaDesc.put("Descargar datos de navegación", salas.get(2));
+
+        // --- ELECTRICIDAD (Índice 3) ---
+        tareaDesc.put("Calibrar distribuidor", salas.get(3));
+        tareaDesc.put("Desviar energía principal", salas.get(3));
+        tareaDesc.put("Restablecer disyuntores", salas.get(3));
+        tareaDesc.put("Arreglar cableado de electricidad", salas.get(3));
+        tareaDesc.put("Descargar datos de electricidad", salas.get(3));
+
+        // --- ARMAMENTO (Índice 4) ---
+        tareaDesc.put("Destruir asteroides", salas.get(4));
+        tareaDesc.put("Calibrar cañones", salas.get(4));
+        tareaDesc.put("Descargar datos de armamento", salas.get(4));
+
+        // --- COMUNICACIONES (Índice 5) ---
+        tareaDesc.put("Reiniciar router WiFi", salas.get(5));
+        tareaDesc.put("Descargar datos de comunicaciones", salas.get(5));
+
+        int seleccion1 = 0;
+        int seleccion2 = 1;
+        ArrayList<String> keys = (ArrayList<String>) tareaDesc.keySet();
+        for (Tripulante tripulante : tripulantes) {
+            Tarea tarea1 = new Tarea(keys.get(seleccion1), tripulante, tareaDesc.get(keys.get(seleccion1)));
+            Tarea tarea2 = new Tarea(keys.get(seleccion2), tripulante, tareaDesc.get(keys.get(seleccion2)));
+            nave.agregarTarea(tarea1);
+            nave.agregarTarea(tarea2);
+            seleccion1 ++;
+            seleccion2 ++;
+        }
+
         //TODO Generación de tareas: Crear y asignar tareas. Mínimo 2 por tripulante. Persistir.
 
-        Nave nave = new Nave(tripulantes, salas);
         while (nave.verificarVictoriaImpostor() || nave.verificarVictoriaTripulantes()) {
             nave.turno();
         }
 
-        //TODO Al finalizar, actualizar estado en BBDD y mostrar resumen.
+        if (nave.verificarVictoriaTripulantes()) {
+            System.out.println("============================================\n" +
+                    "        🎉  FIN DE LA PARTIDA  🎉\n" +
+                    "============================================");
+            System.out.println();
+            System.out.println("¡VICTORIA DE LOS TRIPULANTES!");
+
+            System.out.print("El impostor ");
+            for (int i = 0; i < tripulantes.size(); i++) {
+                if (tripulantes.get(i).getRol() == "Impostro") {
+                    System.out.print(tripulantes.get(i).getNombre());
+                }
+            }
+            System.out.println(" ha sido expulsado.");
+            System.out.println("La nave esta a salvo.");
+            System.out.println();
+            System.out.println("=== RESUMEN FINAL ===");
+            System.out.println("Tripulantes supervivientes:");
+            for (int i = 0; i < tripulantes.size(); i++) {
+                Tripulante trip = tripulantes.get(i);
+
+                String estado;
+                if (trip.getRol().equalsIgnoreCase("Impostor")) {
+                    estado = "Expulsado";
+                } else {
+                    if (trip.isVivo()) {
+                        estado = "Vivo";
+                    } else {
+                        estado = "Muerto";
+                    }
+                }
+
+                System.out.printf("[%d] %-15s - %-10s - %s%n", i, trip.getNombre(), trip.getRol(), estado);
+            }
+
+            int tareasSinCompletar = 0;
+            for (int i = 0; i < nave.getTareas().size(); i++) {
+                if (!nave.getTareas().get(i).isCompletada()) {
+                    tareasSinCompletar ++;
+                }
+            }
+
+            System.out.println();
+            System.out.println("Tareas completadas: " + tareasSinCompletar + "/" + nave.getTareas().size());
+        }
+
+        if (nave.verificarVictoriaImpostor()) {
+            System.out.println("============================================\n" +
+                    "       💀  FIN DE LA PARTIDA  💀 \n" +
+                    "============================================");
+            System.out.println();
+            System.out.println("¡VICTORIA DEL IMPOSTOR!\n");
+
+            System.out.println(impostor.getNombre() + "(Impostor) ha conseguido eliminar a\n" +
+                    "suficientes tripulantes. La nave ha caido.");
+
+            System.out.println();
+            System.out.println("=== RESUMEN FINAL ===");
+            System.out.println("Tripulantes supervivientes:");
+            for (int i = 0; i < tripulantes.size(); i++) {
+                Tripulante trip = tripulantes.get(i);
+
+                String estado;
+                if (trip.getRol().equalsIgnoreCase("Impostor")) {
+                    estado = "VIVO  😈";
+                } else {
+                    estado = "Eliminado";
+                }
+
+                System.out.printf("[%d] %-15s - %-10s - %s%n", i, trip.getNombre(), trip.getRol(), estado);
+            }
+        }
+
+        System.out.println("Gracias por jugar!");
     }
 }
