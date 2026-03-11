@@ -1,10 +1,11 @@
 package com.amongus.modelo;
 
-import com.amongus.modelo.tripulante.Impostor;
-import com.amongus.modelo.tripulante.Tripulante;
+import com.amongus.modelo.tripulante.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Nave {
 
@@ -52,7 +53,7 @@ public class Nave {
     }
 
     public void limpiarPantalla(){
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             System.out.println();
         }
     }
@@ -69,18 +70,31 @@ public class Nave {
         }
     }
 
-    //• iniciarVotacion(): Gestiona la votación con limpieza
-    // de pantalla entre votos.
+    //=== RESULTADO DE LA VOTACION ===
+    // Farid: 0 votos
+    // Miriam: 1 voto
+    // Pablo: 3 votos EXPULSADO ⬅️
+    // Laura: 0 votos
+    //Pablo ha sido expulsado de la nave...
+    //¡Pablo ERA el Impostor! �
+    //TODO
     public void iniciarVotacion(){
+        Scanner sc = new Scanner(System.in);
         HashMap<String, Integer> votacion = new HashMap<>();
+        int tripulanteVotado = 0;
+
         for (Tripulante tripulante : getTripulantesVivos()) {
-            tripulante.votar(getTripulantesVivos().size());
+            for (Tripulante tripulante1 : getTripulantesVivos()) {
+                System.out.println(tripulante1.getId() + ") " + tripulante1.getNombre());
+            }
+            limpiarPantalla();
+            votacion.put(tripulante.getNombre(), 0);
+            tripulanteVotado = tripulante.votar(getTripulantesVivos().size());
+            votacion.put(String.valueOf(getTripulantesVivos().get(tripulanteVotado)), votacion.get(tripulanteVotado) + 1);
+            limpiarPantalla();
         }
 
-
-
-
-
+        System.out.println(" === RESULTADO DE LA VOTACIÓN === ");
     }
 
     public boolean verificarVictoriaTripulantes(){
@@ -100,20 +114,222 @@ public class Nave {
         return getImpostoresVivos() >= getTripulantesVivos().size();
     }
 
-    //• turno(): Turno completo: limpiar, mostrar info, menú, acción, victoria.
     public void turno() {
+        Scanner sc = new Scanner(System.in);
 
+        for (Tripulante tripulante : getTripulantesVivos()){
+            limpiarPantalla();
+            System.out.println("¡Pasa el ordenador a "+ tripulante.getNombre() +"!");
+            System.out.println("Pulsa enter cuando estes listo\n");
+            sc.nextLine();
 
+            System.out.println("-".repeat(50));
+            System.out.println("TURNO DE " + tripulante.getNombre());
+            System.out.println("Tu rol secreto: " + tripulante.getRol());
+            System.out.println("-".repeat(50) + "\n");
 
+            mostrarEstadoNave();
+            System.out.println();
 
+            //Menú del impostor
+            if (tripulante instanceof Impostor) {
+                System.out.println("¿Que quieres hacer?");
+                System.out.println(" 1) Realizar tarea");
+                System.out.print(" 2) Sabotear una sala");
+                System.out.println(" 3) Eliminar a un tripulante");
+                System.out.println(" 4) Pasar turno");
+                System.out.print("Elige opcion: ");
+                int opcion = 0;
+                boolean numero = false;
+                while (!numero || opcion < 1 || opcion > 4) {
+                    try {
+                        opcion = sc.nextInt();
+                        if (opcion < 1 || opcion > 4) {
+                            System.out.println("Error: debes introducir un número del 1 al 4.");
+                        }
+                        numero = true;
+                    } catch (InputMismatchException e) {
+                        System.out.println("Error: debes introducir un número.");
+                    }
+                }
 
+                switch (opcion) {
+                    case 1:
+                        int opcion2 = 0;
+                        System.out.println("¿Qué tarea quieres realizar?");
+                        for (Tarea tarea : tareas) {
+                            System.out.println(tarea.toString());
+                        }
+                        boolean numero2 = false;
+                        while (!numero2 || opcion2 < 1 || opcion2 > tareas.size()) {
+                            try {
+                                opcion2 = sc.nextInt();
+                                if (opcion2 < 1 || opcion2 > tareas.size()) {
+                                    System.out.println("Error: debes introducir un número del 1 al " + tareas.size() + ".");
+                                }
+                                numero2 = true;
+                            } catch (InputMismatchException e) {
+                                System.out.println("Error: debes introducir un número.");
+                            }
+                        }
+                        tripulante.realizarTarea(tareas.get(opcion2 - 1));
+                        System.out.println("Tarea " + tareas.get(opcion2 - 1).getDescripcion() + "completada!");
+                        break;
+                    case 2:
+                        int opcion3 = 0;
+                        System.out.println("¿Qué sala quieres sabotear?");
+                        for (Sala sala : salas) {
+                            System.out.println(sala.toString());
+                        }
+                        boolean numero3 = false;
+                        while (!numero3 || opcion3 < 1 || opcion3 > salas.size()) {
+                            try {
+                                opcion3 = sc.nextInt();
+                                if (opcion3 < 1 || opcion3 > salas.size()) {
+                                    System.out.println("Error: debes introducir un número del 1 al " + salas.size() + ".");
+                                }
+                                numero3 = true;
+                            } catch (InputMismatchException e) {
+                                System.out.println("Error: debes introducir un número.");
+                            }
+                        }
+                        ((Impostor) tripulante).sabotear(salas.get(opcion3 - 1));
+                        System.out.println("Sala " + salas.get(opcion3 - 1).getNombre() + "saboteada!");
+                        break;
+                    case 3:
+                        int opcion4 = 0;
+                        System.out.println("¿Qué tripulante quieres eliminar?");
+                        for (Tripulante tripulanteVivo : getTripulantesVivos()) {
+                            System.out.println(tripulanteVivo.toString());
+                        }
+                        boolean numero4 = false;
+                        while (!numero4 || opcion4 < 1 || opcion4 > getTripulantesVivos().size()) {
+                            try {
+                                opcion4 = sc.nextInt();
+                                if (opcion4 < 1 || opcion4 > getTripulantesVivos().size()) {
+                                    System.out.println("Error: debes introducir un número del 1 al " + getTripulantesVivos().size() + ".");
+                                }
+                                numero4 = true;
+                            } catch (InputMismatchException e) {
+                                System.out.println("Error: debes introducir un número.");
+                            }
+                        }
+                        ((Impostor) tripulante).eliminar(getTripulantesVivos().get(opcion4 - 1));
+                        break;
+                    case 4:
+                        System.out.println("Pasas el turno al siguiente jugador");
+                        break;
+                }
+            } else {
+                //Menú de Capitan, Ingeniero, Médico
+                ArrayList<Tarea> tareasTripulante = new ArrayList<>();
+                System.out.println("Tus tareas pendientes:");
+                int numeroTarea = 1;
+                for (Tarea tarea : tareas) {
+                    if (tripulante == tarea.getTripulanteAsignado() && !tarea.isCompletada()){
+                        System.out.println("[" + numeroTarea + "] " + tarea.getDescripcion() + " - " + tarea.getSala());
+                        numeroTarea++;
+                        tareasTripulante.add(tarea);
+                    }
+                }
 
+                System.out.println("¿Que quieres hacer?");
+                System.out.println(" 1) Realizar tarea");
+                System.out.print(" 2) Usar habilidad especial: ");
+                tripulante.habilidadEspecial();
+                System.out.println(" 3) Pasar turno");
+                System.out.print("Elige opcion: ");
+                int opcion = 0;
+                boolean numero = false;
+                while (!numero || opcion < 1 || opcion > 3) {
+                    try {
+                        opcion = sc.nextInt();
+                        if (opcion < 1 || opcion > 3) {
+                            System.out.println("Error: debes introducir un número del 1 al 3.");
+                        }
+                        numero = true;
+                    } catch (InputMismatchException e) {
+                        System.out.println("Error: debes introducir un número.");
+                    }
+                }
 
+                switch (opcion) {
+                    case 1:
+                        int opcion2 = 0;
+                        System.out.println("¿Qué tarea quieres realizar?");
+                        for (Tarea tarea : tareasTripulante) {
+                            System.out.println(tarea.toString());
+                        }
+                        boolean numero2 = false;
+                        while (!numero2 || opcion2 < 1 || opcion2 > tareas.size()) {
+                            try {
+                                opcion2 = sc.nextInt();
+                                if (opcion2 < 1 || opcion2 > tareas.size()) {
+                                    System.out.println("Error: debes introducir un número del 1 al " + tareas.size() + ".");
+                                }
+                                numero2 = true;
+                            } catch (InputMismatchException e) {
+                                System.out.println("Error: debes introducir un número.");
+                            }
+                        }
+                        tripulante.realizarTarea(tareas.get(opcion2 - 1));
+                        System.out.println("Tarea " + tareas.get(opcion2 - 1).getDescripcion() + "completada!");
+                        break;
+                    case 2:
+                        if (tripulante instanceof Medico) {
+                            int opcion3 = 0;
+                            Medico medico = (Medico) tripulante;
+                            System.out.println("¿Qué tripulante quieres examinar?");
+                            for (Tripulante tripulanteVivo : getTripulantesVivos()) {
+                                System.out.println(tripulanteVivo.toString());
+                            }
+                            boolean numero3 = false;
+                            while (!numero3 || opcion < 1 || opcion > getTripulantesVivos().size()) {
+                                try {
+                                    opcion3 = sc.nextInt();
+                                    if (opcion3 < 1 || opcion3 > getTripulantesVivos().size()) {
+                                        System.out.println("Error: debes introducir un número del 1 al " + getTripulantesVivos().size() + ".");
+                                    }
+                                    numero3 = true;
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Error: debes introducir un número.");
+                                }
+                            }
+                            medico.examinar(getTripulantesVivos().get(opcion3 - 1));
+                        } else if (tripulante instanceof Ingeniero) {
+                            Ingeniero ingeniero = (Ingeniero) tripulante;
+                            int opcion4 = 0;
+                            System.out.println("¿Qué sala quieres reparar?");
+                            for (Sala sala : salas) {
+                                System.out.println(sala.toString());
+                            }
+                            boolean numero3 = false;
+                            while (!numero3 || opcion < 1 || opcion > salas.size()) {
+                                try {
+                                    opcion4 = sc.nextInt();
+                                    if (opcion4 < 1 || opcion4 > salas.size()) {
+                                        System.out.println("Error: debes introducir un número del 1 al " + salas.size() + ".");
+                                    }
+                                    numero3 = true;
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Error: debes introducir un número.");
+                                }
+                            }
+                            ingeniero.repararSalas(salas.get(opcion4 - 1));
+                        } else {
+                            Capitan capitan = (Capitan) tripulante;
+                            capitan.convocarVotacion(this);
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Pasas el turno al siguiente jugador");
+                        break;
+                }
+            }
 
-
-
-
-
+            System.out.println("Pulsa Enter para pasar al siguiente turno...\n");
+            sc.nextLine();
+        }
     }
 
 
