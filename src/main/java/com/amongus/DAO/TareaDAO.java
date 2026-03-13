@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public interface TareaDAO {
 
 
-    void insertar(Tarea tarea, Tripulante tripulante, Sala sala);
+    void insertar(Tarea tarea);
 
     Tarea obtener(int id);
 

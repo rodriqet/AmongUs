@@ -17,13 +17,13 @@ public class TareaDAOImpl implements TareaDAO {
     }
 
     @Override
-    public void insertar(Tarea tarea, Tripulante tripulante, Sala sala){
+    public void insertar(Tarea tarea){
         String sql = "INSERT INTO tarea (descripcion, completada, id_tripulante, id_sala) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = conexion.prepareStatement(sql)) {
             ps.setString(1, tarea.getDescripcion());
             ps.setBoolean(2, tarea.isCompletada());
-            ps.setInt(3, tripulante.getId());
-            ps.setInt(4, sala.getId());
+            ps.setInt(3, tarea.getTripulanteAsignado().getId());
+            ps.setInt(4, tarea.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
