@@ -15,6 +15,7 @@ public class Nave {
     public Nave(ArrayList<Tripulante> tripulantes, ArrayList<Sala> salas){
         this.tripulantes = tripulantes;
         this.salas = salas;
+        this.tareas = new ArrayList<>();
     }
 
     public ArrayList<Tripulante> getTripulantes() {

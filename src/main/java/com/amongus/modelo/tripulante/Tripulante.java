@@ -12,6 +12,7 @@ import java.util.Scanner;
 public abstract class Tripulante implements Trabajable, Votable {
 
     private int id;
+    static private int id_auto = 1;
     private String nombre;
     private String rol;
     private boolean vivo;
@@ -20,6 +21,8 @@ public abstract class Tripulante implements Trabajable, Votable {
         this.nombre = nombre;
         this.rol = rol;
         this.vivo = true;
+        this.id = id_auto;
+        id_auto ++;
     }
 
     public int getId() {

@@ -1,6 +1,7 @@
 package com.amongus.DAOImpl;
 
 import com.amongus.DAO.TareaDAO;
+import com.amongus.modelo.Nave;
 import com.amongus.modelo.Sala;
 import com.amongus.modelo.Tarea;
 import com.amongus.modelo.tripulante.Tripulante;
@@ -23,7 +24,7 @@ public class TareaDAOImpl implements TareaDAO {
             ps.setString(1, tarea.getDescripcion());
             ps.setBoolean(2, tarea.isCompletada());
             ps.setInt(3, tarea.getTripulanteAsignado().getId());
-            ps.setInt(4, tarea.getId());
+            ps.setInt(4, tarea.getSala().getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

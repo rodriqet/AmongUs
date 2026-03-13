@@ -18,7 +18,7 @@ public class DBUtil {
 
     private DBUtil() {
         try {
-            String url = "jdbc:mysql://localhost:3307/nave_espacial"; //Rodri: 3307
+            String url = "jdbc:mysql://localhost:3306/nave_espacial"; //Rodri: 3307
             String usuario = "root";
             String password = "";
 
