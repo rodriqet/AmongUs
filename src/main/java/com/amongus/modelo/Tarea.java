@@ -5,6 +5,7 @@ import com.amongus.modelo.tripulante.Tripulante;
 public class Tarea {
 
     private int id;
+    static private int id_auto = 1;
 
     private String descripcion;
 
@@ -19,6 +20,8 @@ public class Tarea {
         completada = false;
         this.tripulanteAsignado = tripulante;
         this.sala = sala;
+        this.id = id_auto;
+        id_auto ++;
     }
 
     public int getId() {

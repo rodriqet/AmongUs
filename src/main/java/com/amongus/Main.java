@@ -29,7 +29,7 @@ public class Main {
             SalaDAO salaDAO = new SalaDAOImpl(conexion);
 
             int numTripulantes = 0;
-            while (numTripulantes >= 4 && numTripulantes <= 10) {
+            while (numTripulantes < 4 || numTripulantes > 10) {
                 System.out.print("Cuantos jugadores van a jugar? (mínimo 4, máximo 10): ");
                 numTripulantes = sc.nextInt();
                 sc.nextLine();
@@ -37,8 +37,9 @@ public class Main {
 
             ArrayList<String> jugadores = new ArrayList<>();
             for (int i = 0; i < numTripulantes; i++) {
-                System.out.print("El " + i + " jugador como se llama: ");
-                jugadores.add(sc.nextLine());
+                System.out.print("El " + (i + 1) + " jugador como se llama: ");
+                String nombre = sc.nextLine();
+                jugadores.add(nombre);
             }
 
             ArrayList<Tripulante> tripulantes = new ArrayList<>();
@@ -50,14 +51,16 @@ public class Main {
             Impostor impostor = new Impostor(jugadores.removeFirst());
             tripulantes.add(impostor);
 
-            for (int i = 0; i < tripulantes.size(); i++) {
-                if (i%2 == 0) {
-                    Medico medico = new Medico(jugadores.removeFirst());
+            int tripul = 1;
+            for (String jugador : jugadores) {
+                if (tripul%2 == 0) {
+                    Medico medico = new Medico(jugador);
                     tripulantes.add(medico);
                 } else {
-                    Ingeniero ingeniero = new Ingeniero(jugadores.removeFirst());
+                    Ingeniero ingeniero = new Ingeniero(jugador);
                     tripulantes.add(ingeniero);
                 }
+                tripul ++;
             }
 
             ArrayList<Sala> salas = new ArrayList<>();
@@ -69,13 +72,12 @@ public class Main {
                 salas.add(sala);
             }
 
-
             for (int i = 0; i < tripulantes.size(); i++) {
                 tripulanteDAO.insertar(tripulantes.get(i));
             }
 
             for (int i = 0; i < salas.size(); i++) {
-                salaDAO.insertar(salas.get(i));
+                salaDAO.insertar(salas.get(i)); //AQUI FALLA
             }
 
             Nave nave = new Nave(tripulantes, salas);
@@ -117,10 +119,10 @@ public class Main {
 
             int seleccion1 = 0;
             int seleccion2 = 1;
-            ArrayList<String> keys = (ArrayList<String>) tareaDesc.keySet();
+            ArrayList<String> keys = new ArrayList<> (tareaDesc.keySet()) ;
             for (Tripulante tripulante : tripulantes) {
-                Tarea tarea1 = new Tarea(keys.get(seleccion1), tripulante, tareaDesc.get(keys.get(seleccion1)));
-                Tarea tarea2 = new Tarea(keys.get(seleccion2), tripulante, tareaDesc.get(keys.get(seleccion2)));
+                Tarea tarea1 = new Tarea(keys.get(seleccion1), tripulante, tareaDesc.get(keys.get(seleccion1)) );
+                Tarea tarea2 = new Tarea(keys.get(seleccion2), tripulante, tareaDesc.get(keys.get(seleccion1)) );
                 nave.agregarTarea(tarea1);
                 nave.agregarTarea(tarea2);
                 seleccion1 ++;
@@ -131,7 +133,7 @@ public class Main {
                 tareaDAO.insertar(nave.getTareas().get(i));
             }
 
-            while (nave.verificarVictoriaImpostor() || nave.verificarVictoriaTripulantes()) {
+            while (!nave.verificarVictoriaImpostor() || !nave.verificarVictoriaTripulantes()) {
                 nave.turno();
             }
 

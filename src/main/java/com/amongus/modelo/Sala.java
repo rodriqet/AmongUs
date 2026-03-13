@@ -4,6 +4,7 @@ package com.amongus.modelo;
 public class Sala {
 
     private int id;
+    static private int id_auto = 1;
 
     private String nombre;
 
@@ -11,7 +12,9 @@ public class Sala {
 
     public Sala(String nombre){
         this.nombre = nombre;
-        saboteada = false;
+        this.saboteada = false;
+        this.id = id_auto;
+        id_auto ++;
     }
 
     public int getId() {
