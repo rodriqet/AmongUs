@@ -58,13 +58,13 @@ public class Nave {
 
     public void mostrarEstadoNave(){
         for (Tripulante tripulante : tripulantes) {
-            System.out.println(tripulante.toString());
+            System.out.println(tripulante.getNombre());
         }
         for (Sala sala : salas) {
-            System.out.println(sala.toString());
+            System.out.println(sala.getNombre());
         }
         for (Tarea tarea : tareas) {
-            System.out.println(tarea.toString());
+            System.out.println(tarea.getDescripcion());
         }
     }
 
@@ -197,7 +197,7 @@ public class Nave {
                         int opcion2 = 0;
                         System.out.println("¿Qué tarea quieres realizar?");
                         for (Tarea tarea : tareas) {
-                            System.out.println(tarea.toString());
+                            System.out.println(tarea.getDescripcion());
                         }
                         boolean numero2 = false;
                         while (!numero2 || opcion2 < 1 || opcion2 > tareas.size()) {
@@ -218,7 +218,7 @@ public class Nave {
                         int opcion3 = 0;
                         System.out.println("¿Qué sala quieres sabotear?");
                         for (Sala sala : salas) {
-                            System.out.println(sala.toString());
+                            System.out.println(sala.getNombre());
                         }
                         boolean numero3 = false;
                         while (!numero3 || opcion3 < 1 || opcion3 > salas.size()) {
@@ -239,7 +239,7 @@ public class Nave {
                         int opcion4 = 0;
                         System.out.println("¿Qué tripulante quieres eliminar?");
                         for (Tripulante tripulanteVivo : getTripulantesVivos()) {
-                            System.out.println(tripulanteVivo.toString());
+                            System.out.println(tripulanteVivo.getNombre());
                         }
                         boolean numero4 = false;
                         while (!numero4 || opcion4 < 1 || opcion4 > getTripulantesVivos().size()) {
@@ -297,7 +297,7 @@ public class Nave {
                         int opcion2 = 0;
                         System.out.println("¿Qué tarea quieres realizar?");
                         for (Tarea tarea : tareasTripulante) {
-                            System.out.println(tarea.toString());
+                            System.out.println(tarea.getDescripcion());
                         }
                         boolean numero2 = false;
                         while (!numero2 || opcion2 < 1 || opcion2 > tareas.size()) {
@@ -320,7 +320,7 @@ public class Nave {
                             Medico medico = (Medico) tripulante;
                             System.out.println("¿Qué tripulante quieres examinar?");
                             for (Tripulante tripulanteVivo : getTripulantesVivos()) {
-                                System.out.println(tripulanteVivo.toString());
+                                System.out.println(tripulanteVivo.getNombre());
                             }
                             boolean numero3 = false;
                             while (!numero3 || opcion < 1 || opcion > getTripulantesVivos().size()) {
@@ -340,7 +340,7 @@ public class Nave {
                             int opcion4 = 0;
                             System.out.println("¿Qué sala quieres reparar?");
                             for (Sala sala : salas) {
-                                System.out.println(sala.toString());
+                                System.out.println(sala.getNombre());
                             }
                             boolean numero3 = false;
                             while (!numero3 || opcion < 1 || opcion > salas.size()) {
