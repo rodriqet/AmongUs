@@ -57,14 +57,24 @@ public class Nave {
     }
 
     public void mostrarEstadoNave(){
-        for (Tripulante tripulante : tripulantes) {
+        System.out.println("\nESTADO DE LA NAVE 🚀👩‍🚀");
+        System.out.println("Tripulantes vivos en la nave:");
+        for (Tripulante tripulante : getTripulantesVivos()) {
             System.out.println(tripulante.getNombre());
         }
+        System.out.println("Salas de la nave:");
         for (Sala sala : salas) {
-            System.out.println(sala.getNombre());
+            if (sala.isSaboteada()) {
+                System.out.println(sala.getNombre() + " saboteado");
+            } else {
+                System.out.println(sala.getNombre() + " en funcionamiento");
+            }
         }
+        System.out.println("Tareas pendientes:");
         for (Tarea tarea : tareas) {
-            System.out.println(tarea.getDescripcion());
+            if (!tarea.isCompletada()) {
+                System.out.println(tarea.getDescripcion());
+            }
         }
     }
 
@@ -266,7 +276,7 @@ public class Nave {
                 int numeroTarea = 1;
                 for (Tarea tarea : tareas) {
                     if (tripulante == tarea.getTripulanteAsignado() && !tarea.isCompletada()){
-                        System.out.println("[" + numeroTarea + "] " + tarea.getDescripcion() + " - " + tarea.getSala());
+                        System.out.println("[" + numeroTarea + "] " + tarea.getDescripcion() + " - " + tarea.getSala().getNombre());
                         numeroTarea++;
                         tareasTripulante.add(tarea);
                     }
