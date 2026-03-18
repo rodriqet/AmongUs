@@ -66,7 +66,9 @@ public abstract class Tripulante implements Trabajable, Votable {
 
         System.out.println("!Turno de voto de " + this.getNombre() + "!");
         System.out.print("A quien votas? (1-" + numero + ", 0 para skip): ");
-        return sc.nextInt();
+        int voto = sc.nextInt();
+        sc.nextLine();
+        return voto - 1;
     }
 
     public void habilidadEspecial() {}
