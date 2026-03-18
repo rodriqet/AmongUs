@@ -19,14 +19,17 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("=".repeat(40));
+        System.out.println("=".repeat(50));
         System.out.println("   🚀  AMONG US TERMINAL - NAVE ESPACIAL  🚀");
-        System.out.println("=".repeat(40));
+        System.out.println("=".repeat(50));
+        System.out.println("\033[32m");
 
         try (Connection conexion = DBUtil.getInstance().getConexion()) {
             TripulanteDAO tripulanteDAO = new TripulanteDAOImpl(conexion);
             TareaDAO tareaDAO = new TareaDAOImpl(conexion);
             SalaDAO salaDAO = new SalaDAOImpl(conexion);
+
+            System.out.println("\033[0m");
 
             int numTripulantes = 0;
             while (numTripulantes < 4 || numTripulantes > 10) {
@@ -77,7 +80,7 @@ public class Main {
             }
 
             for (int i = 0; i < salas.size(); i++) {
-                salaDAO.insertar(salas.get(i)); //AQUI FALLA
+                salaDAO.insertar(salas.get(i));
             }
 
             Nave nave = new Nave(tripulantes, salas);
