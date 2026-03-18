@@ -32,10 +32,19 @@ public class Main {
             System.out.println("\033[0m");
 
             int numTripulantes = 0;
-            while (numTripulantes < 4 || numTripulantes > 10) {
-                System.out.print("Cuantos jugadores van a jugar? (mínimo 4, máximo 10): ");
-                numTripulantes = sc.nextInt();
-                sc.nextLine();
+            System.out.print("Cuantos jugadores van a jugar? (mínimo 4, máximo 10): ");
+            while (true) {
+                try {
+                    numTripulantes = sc.nextInt();
+                    if (numTripulantes >= 4 && numTripulantes <= 10) {
+                        sc.nextLine();
+                        break;
+                    }
+                    System.out.println("Error: debes introducir un número del 1 al 4.");
+                } catch (InputMismatchException e) {
+                    System.out.println("Error: debes introducir un número.");
+                    sc.nextLine();
+                }
             }
 
             ArrayList<String> jugadores = new ArrayList<>();
