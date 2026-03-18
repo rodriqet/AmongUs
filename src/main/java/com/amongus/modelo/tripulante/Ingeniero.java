@@ -16,7 +16,7 @@ public class Ingeniero extends Tripulante {
     public void repararSalas(Sala sala) {
         if (sala.isSaboteada()) {
             System.out.println("Se esta reparando...");
-            sala.setSaboteada(true);
+            sala.setSaboteada(false);
             System.out.println("La sala ya esta reparada");
         } else {
             System.out.println("No hay nada para reparar");

@@ -38,9 +38,7 @@ public class Nave {
         ArrayList<Tripulante> tripulantesVivos = new ArrayList<>();
         for (Tripulante tripulante : tripulantes) {
             if (tripulante.isVivo()){
-                if (!(tripulante instanceof Impostor)){
-                    tripulantesVivos.add(tripulante);
-                }
+                tripulantesVivos.add(tripulante);
             }
         }
         return tripulantesVivos;
@@ -57,12 +55,12 @@ public class Nave {
     }
 
     public void mostrarEstadoNave(){
-        System.out.println("\nESTADO DE LA NAVE 🚀👩‍🚀");
-        System.out.println("Tripulantes vivos en la nave:");
+        System.out.println("ESTADO DE LA NAVE 🚀👩‍🚀");
+        System.out.println("\n\033[34mTripulantes vivos en la nave:\033[0m");
         for (Tripulante tripulante : getTripulantesVivos()) {
             System.out.println(tripulante.getNombre());
         }
-        System.out.println("Salas de la nave:");
+        System.out.println("\n\033[34mSalas de la nave:\033[0m");
         for (Sala sala : salas) {
             if (sala.isSaboteada()) {
                 System.out.println(sala.getNombre() + " saboteado");
@@ -70,7 +68,7 @@ public class Nave {
                 System.out.println(sala.getNombre() + " en funcionamiento");
             }
         }
-        System.out.println("Tareas pendientes:");
+        System.out.println("\n\033[34mTareas pendientes:\033[0m");
         for (Tarea tarea : tareas) {
             if (!tarea.isCompletada()) {
                 System.out.println(tarea.getDescripcion());
@@ -84,10 +82,10 @@ public class Nave {
         int tripulanteVotado = 0;
 
         for (Tripulante tripulante : getTripulantesVivos()) {
+            limpiarPantalla();
             for (Tripulante tripulante1 : getTripulantesVivos()) {
                 System.out.println(tripulante1.getId() + ") " + tripulante1.getNombre());
             }
-            limpiarPantalla();
             votacion.put(tripulante.getNombre(), 0);
             tripulanteVotado = tripulante.votar(getTripulantesVivos().size());
             votacion.put(String.valueOf(getTripulantesVivos().get(tripulanteVotado)), votacion.get(tripulanteVotado) + 1);
@@ -184,7 +182,7 @@ public class Nave {
             if (tripulante instanceof Impostor) {
                 System.out.println("¿Que quieres hacer?");
                 System.out.println(" 1) Realizar tarea");
-                System.out.print(" 2) Sabotear una sala");
+                System.out.println(" 2) Sabotear una sala");
                 System.out.println(" 3) Eliminar a un tripulante");
                 System.out.println(" 4) Pasar turno");
                 System.out.print("Elige opcion: ");
@@ -248,8 +246,12 @@ public class Nave {
                     case 3:
                         int opcion4 = 0;
                         System.out.println("¿Qué tripulante quieres eliminar?");
+                        int seleccio = 1;
+                        Impostor impostor = (Impostor) tripulante;
+                        getTripulantesVivos().remove(impostor);
                         for (Tripulante tripulanteVivo : getTripulantesVivos()) {
-                            System.out.println(tripulanteVivo.getNombre());
+                            System.out.println("[" + seleccio + "] " + tripulanteVivo.getNombre());
+                            seleccio ++;
                         }
                         boolean numero4 = false;
                         while (!numero4 || opcion4 < 1 || opcion4 > getTripulantesVivos().size()) {
@@ -264,6 +266,7 @@ public class Nave {
                             }
                         }
                         ((Impostor) tripulante).eliminar(getTripulantesVivos().get(opcion4 - 1));
+                        getTripulantesVivos().add(impostor);
                         break;
                     case 4:
                         System.out.println("Pasas el turno al siguiente jugador");
@@ -329,8 +332,11 @@ public class Nave {
                             int opcion3 = 0;
                             Medico medico = (Medico) tripulante;
                             System.out.println("¿Qué tripulante quieres examinar?");
+                            int seleccion = 1;
+                            getTripulantesVivos().remove(medico);
                             for (Tripulante tripulanteVivo : getTripulantesVivos()) {
-                                System.out.println(tripulanteVivo.getNombre());
+                                System.out.println("[" + seleccion + "] " + tripulanteVivo.getNombre());
+                                seleccion ++;
                             }
                             boolean numero3 = false;
                             while (!numero3 || opcion < 1 || opcion > getTripulantesVivos().size()) {
@@ -345,6 +351,7 @@ public class Nave {
                                 }
                             }
                             medico.examinar(getTripulantesVivos().get(opcion3 - 1));
+                            getTripulantesVivos().add(medico);
                         } else if (tripulante instanceof Ingeniero) {
                             Ingeniero ingeniero = (Ingeniero) tripulante;
                             int opcion4 = 0;
