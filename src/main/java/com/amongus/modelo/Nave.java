@@ -45,7 +45,13 @@ public class Nave {
     }
 
     public int getImpostoresVivos() {
-        return tripulantes.size() - getTripulantesVivos().size();
+        int suma = 0;
+        for (Tripulante tripulante : tripulantes) {
+            if (tripulante instanceof Impostor && tripulante.isVivo()) {
+                suma ++;
+            }
+        }
+        return suma;
     }
 
     public void limpiarPantalla(){
@@ -163,14 +169,29 @@ public class Nave {
     }
 
     public boolean verificarVictoriaImpostor() {
-        return getImpostoresVivos() >= getTripulantesVivos().size();
+        int impostoresVivos = getImpostoresVivos();
+        int personasVivas = getTripulantesVivos().size() - impostoresVivos;
+        return impostoresVivos >= personasVivas;
     }
 
     public void turno() {
         Scanner sc = new Scanner(System.in);
 
         for (Tripulante tripulante : getTripulantesVivos()){
+            if (verificarVictoriaImpostor() || verificarVictoriaTripulantes()) {
+                break;
+            }
+
+            if (!tripulante.isVivo()) {
+                continue;
+            }
+
+            System.out.println("Pulsa Enter para pasar al siguiente turno...\n");
+            sc.nextLine();
+            System.out.println("Pasando ....");
+
             limpiarPantalla();
+
             System.out.println("¡Pasa el ordenador a "+ tripulante.getNombre() +"!");
             System.out.println("Pulsa enter cuando estes listo\n");
             sc.nextLine();
@@ -251,27 +272,29 @@ public class Nave {
                     case 3:
                         int opcion4 = 0;
                         System.out.println("¿Qué tripulante quieres eliminar?");
-                        int seleccio = 1;
                         Impostor impostor = (Impostor) tripulante;
-                        getTripulantesVivos().remove(impostor);
+                        ArrayList<Tripulante> tripulan = new ArrayList<>();
+                        int seleccio = 1;
                         for (Tripulante tripulanteVivo : getTripulantesVivos()) {
-                            System.out.println("[" + seleccio + "] " + tripulanteVivo.getNombre());
-                            seleccio ++;
+                            if (tripulanteVivo != impostor) {
+                                System.out.println("[" + seleccio + "] " + tripulanteVivo.getNombre());
+                                tripulan.add(tripulanteVivo);
+                                seleccio ++;
+                            }
                         }
                         while (true) {
                             try {
                                 opcion4 = sc.nextInt();
-                                if (opcion4 >= 1 && opcion4 <= getTripulantesVivos().size()) {
+                                if (opcion4 >= 1 && opcion4 <= tripulan.size()) {
                                     break;
                                 }
-                                System.out.println("Error: debes introducir un número del 1 al " + getTripulantesVivos().size() + ".");
+                                System.out.println("Error: debes introducir un número del 1 al " + tripulan.size() + ".");
                             } catch (InputMismatchException e) {
                                 System.out.println("Error: debes introducir un número.");
                                 sc.next();
                             }
                         }
-                        ((Impostor) tripulante).eliminar(getTripulantesVivos().get(opcion4 - 1));
-                        getTripulantesVivos().add(impostor);
+                        impostor.eliminar(tripulan.get(opcion4 - 1));
                         break;
                     case 4:
                         System.out.println("Pasas el turno al siguiente jugador");
@@ -329,8 +352,8 @@ public class Nave {
                                 sc.next();
                             }
                         }
-                        tripulante.realizarTarea(tareas.get(opcion2 - 1));
-                        System.out.println("Tarea " + tareas.get(opcion2 - 1).getDescripcion() + "completada!");
+                        tripulante.realizarTarea(tareasTripulante.get(opcion2 - 1));
+                        System.out.println("Tarea " + tareasTripulante.get(opcion2 - 1).getDescripcion() + " completada!");
                         break;
                     case 2:
                         if (tripulante instanceof Medico) {
@@ -338,25 +361,28 @@ public class Nave {
                             Medico medico = (Medico) tripulante;
                             System.out.println("¿Qué tripulante quieres examinar?");
                             int seleccion = 1;
-                            getTripulantesVivos().remove(medico);
+                            ArrayList<Tripulante> personas = new ArrayList<>();
                             for (Tripulante tripulanteVivo : getTripulantesVivos()) {
-                                System.out.println("[" + seleccion + "] " + tripulanteVivo.getNombre());
-                                seleccion ++;
+                                if (tripulanteVivo != medico) {
+                                    System.out.println("[" + seleccion + "] " + tripulanteVivo.getNombre());
+                                    personas.add(tripulanteVivo);
+                                    seleccion ++;
+                                }
                             }
                             while (true) {
                                 try {
+                                    System.out.print("Que tripulante quieres: ");
                                     opcion3 = sc.nextInt();
-                                    if (opcion3 >= 1 && opcion3 <= getTripulantesVivos().size()) {
+                                    if (opcion3 >= 1 && opcion3 <= personas.size()) {
                                         break;
                                     }
-                                    System.out.println("Error: debes introducir un número del 1 al " + getTripulantesVivos().size() + ".");
+                                    System.out.println("Error: debes introducir un número del 1 al " + personas.size() + ".");
                                 } catch (InputMismatchException e) {
                                     System.out.println("Error: debes introducir un número.");
                                     sc.next();
                                 }
                             }
-                            medico.examinar(getTripulantesVivos().get(opcion3 - 1));
-                            getTripulantesVivos().add(medico);
+                            medico.examinar(personas.get(opcion3 - 1));
                         } else if (tripulante instanceof Ingeniero) {
                             Ingeniero ingeniero = (Ingeniero) tripulante;
                             int opcion4 = 0;
@@ -387,9 +413,6 @@ public class Nave {
                         break;
                 }
             }
-
-            System.out.println("Pulsa Enter para pasar al siguiente turno...\n");
-            sc.nextLine();
         }
     }
 

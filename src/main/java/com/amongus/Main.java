@@ -145,7 +145,7 @@ public class Main {
                 tareaDAO.insertar(nave.getTareas().get(i));
             }
 
-            while (!nave.verificarVictoriaImpostor() || !nave.verificarVictoriaTripulantes()) {
+            while (!nave.verificarVictoriaImpostor() && !nave.verificarVictoriaTripulantes()) {
                 nave.turno();
             }
 
@@ -167,8 +167,8 @@ public class Main {
                 System.out.println();
                 System.out.println("=== RESUMEN FINAL ===");
                 System.out.println("Tripulantes supervivientes:");
-                for (int i = 0; i < tripulantes.size(); i++) {
-                    Tripulante trip = tripulantes.get(i);
+                for (int i = 0; i < nave.getTripulantesVivos().size(); i++) {
+                    Tripulante trip = nave.getTripulantesVivos().get(i);
 
                     String estado;
                     if (trip.getRol().equalsIgnoreCase("Impostor")) {
@@ -191,6 +191,8 @@ public class Main {
                     }
                 }
 
+                tareasSinCompletar = nave.getTareas().size() - tareasSinCompletar;
+
                 System.out.println();
                 System.out.println("Tareas completadas: " + tareasSinCompletar + "/" + nave.getTareas().size());
             }
@@ -202,18 +204,20 @@ public class Main {
                 System.out.println();
                 System.out.println("¡VICTORIA DEL IMPOSTOR!\n");
 
-                System.out.println(impostor.getNombre() + "(Impostor) ha conseguido eliminar a\n" +
-                        "suficientes tripulantes. La nave ha caido.");
+                System.out.println("El Impostor " + impostor.getNombre() + " ha conseguido eliminar a suficientes tripulantes.");
+                System.out.println("La nave ha caido.");
 
                 System.out.println();
                 System.out.println("=== RESUMEN FINAL ===");
                 System.out.println("Tripulantes supervivientes:");
-                for (int i = 0; i < tripulantes.size(); i++) {
-                    Tripulante trip = tripulantes.get(i);
+                for (int i = 0; i < nave.getTripulantesVivos().size(); i++) {
+                    Tripulante trip = nave.getTripulantesVivos().get(i);
 
                     String estado;
                     if (trip.getRol().equalsIgnoreCase("Impostor")) {
                         estado = "VIVO  😈";
+                    } else if (trip.isVivo()) {
+                        estado = "Vivo 😥";
                     } else {
                         estado = "Eliminado";
                     }

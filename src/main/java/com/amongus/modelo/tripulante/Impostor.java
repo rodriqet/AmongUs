@@ -21,10 +21,11 @@ public class Impostor extends Tripulante implements Saboteable {
     }
 
     public void eliminar(Tripulante tripulante) {
-        if (tripulante.getRol().equals("impostor")) {
+        if (!tripulante.getRol().equals("impostor")) {
             tripulante.setVivo(false);
+            System.out.println("El tripunlante " + tripulante.getNombre() + " esta muerto.");
         } else {
-            System.out.println("No puedes eliminar a un impostor");
+            System.out.println("No puedes eliminarte a ti mismo");
         }
     }
 

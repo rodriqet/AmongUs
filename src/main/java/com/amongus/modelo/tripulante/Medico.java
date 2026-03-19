@@ -17,8 +17,5 @@ public class Medico extends Tripulante {
         } else {
             System.out.println("No es el impostor: " + tripulante.getNombre());
         }
-        for (int i = 0; i < 30; i++) {
-            System.out.println();
-        }
     }
 }
